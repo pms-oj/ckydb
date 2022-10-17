@@ -1,10 +1,10 @@
 extern crate core;
 
-mod cache;
-mod constants;
-mod controller;
-mod errors;
-mod store;
-mod utils;
+pub mod cache;
+pub mod constants;
+pub mod controller;
+pub mod errors;
+pub mod store;
+pub mod utils;
 
 pub use controller::{connect, Controller};
