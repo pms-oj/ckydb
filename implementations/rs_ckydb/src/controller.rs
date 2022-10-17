@@ -81,7 +81,7 @@ pub struct Ckydb {
     store: Arc<Mutex<Store>>,
     vacuum_interval_sec: f64,
     is_open: bool,
-    tx: mpsc::Sender<Signal>,
+    tx: mpsc::SyncSender<Signal>,
     rv: Arc<Mutex<mpsc::Receiver<Signal>>>,
 }
 
@@ -95,7 +95,7 @@ impl Ckydb {
     /// [io::Error]: std::io::Error
     fn new(db_path: &str, max_file_size_kb: f64, vacuum_interval_sec: f64) -> io::Result<Ckydb> {
         let mut store = Store::new(db_path, max_file_size_kb);
-        let (tx, rv) = mpsc::channel();
+        let (tx, rv) = mpsc::sync_channel(crate::constants::CHANNEL_BOUND);
 
         store.load().and(Ok(Ckydb {
             tasks: Some(vec![]),
